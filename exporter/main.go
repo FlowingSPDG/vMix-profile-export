@@ -105,7 +105,7 @@ func main() {
 	// goroutine setup
 	wg := sync.WaitGroup{}
 	for i := 0; i < len(profile.Input); i++ {
-		if profile.Input[i].Type == InputMovie || profile.Input[i].Type == InputImage {
+		if profile.Input[i].Type == InputMovie || profile.Input[i].Type == InputImage || profile.Input[i].Type == InputTitle {
 			logrus.Debugf("Input Type : %s : Path : %s\n", profile.Input[i].Type, profile.Input[i].Text)
 			wg.Add(1)
 			go func(v *models.Input) {
