@@ -35,10 +35,5 @@ endif
 
 test:
 	$(GOTEST) -v -count=1 ./...
-clean:
-	-@$(GOCLEAN)
-	-@$(RM) $(DIST_DIR)/*
-build: clean
-	-@$(MKDIR) $(DIST_DIR)
-	@$(GOBUILD) -ldflags -H=windowsgui -o $(DIST_DIR)/importer.exe ./importer
-	@$(GOBUILD) -ldflags -H=windowsgui -o $(DIST_DIR)/exporter.exe ./exporter
+build: 
+	@$(GOBUILD) -o $(DIST_DIR)/exporter.exe ./exporter
