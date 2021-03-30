@@ -9,9 +9,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/FlowingSPDG/vMix-profile-export/models"
 	"github.com/sirupsen/logrus"
 	"github.com/sqweek/dialog"
+
+	"github.com/FlowingSPDG/vMix-profile-export/models"
 )
 
 const (
@@ -46,6 +47,12 @@ var (
 )
 
 func init() {
+	logrus.SetLevel(logrus.DebugLevel)
+}
+
+func main() {
+	logrus.Infoln("STARTING...")
+
 	// Parse args
 	flag.Parse()
 
@@ -73,25 +80,15 @@ func init() {
 		exportPath = directory
 	}
 
-	logrus.SetLevel(logrus.DebugLevel)
-}
-
-func main() {
-	logrus.Infoln("STARTING...")
-
-	// Declare variables
-	profile := &models.Profile{}
-
-	// Parse XML
-	prof, err := os.ReadFile(ImportProfilePath)
+	b, err := os.ReadFile(ImportProfilePath)
 	if err != nil {
 		logrus.Fatalln("Failed to read profile file :", err)
 	}
 	logrus.Debugln("Read ok...")
 
-	if err := xml.Unmarshal(prof, profile); err != nil {
-		logrus.Fatalln("Failed to unmarshal profile XML :", err)
-		panic(err)
+	profile, err := parseProfile(b)
+	if err != nil {
+		logrus.Fatalln("Failed to read profile file :", err)
 	}
 	logrus.Debugln("Marshal ok...")
 
@@ -154,7 +151,7 @@ func main() {
 
 	// Write profile itself
 	profPath := path.Join(exportPath, "profile.vmix")
-	b, _ := xml.Marshal(profile)
-	os.WriteFile(profPath, b, 0777)
+	updProf, _ := xml.Marshal(profile)
+	os.WriteFile(profPath, updProf, 0777)
 	logrus.Infoln("DONE")
 }
