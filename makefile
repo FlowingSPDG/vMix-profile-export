@@ -35,5 +35,7 @@ endif
 
 test:
 	$(GOTEST) -v -count=1 ./...
+
+.PHONY: build
 build: 
 	@$(GOBUILD) -o $(DIST_DIR)/exporter.exe ./exporter
